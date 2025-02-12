@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package moba;
+
+// 玩家输入
+message PlayerInput {
+    uint32 player_id = 1;
+    uint32 frame_num = 2;
+    Vector3 move_dir = 3;
+    repeated uint32 skills = 4;
+}
+
+// 三维向量
+message Vector3 {
+    float x = 1;
+    float y = 2;
+    float z = 3;
+}
+
+// 帧数据
+message FrameData {
+    uint32 frame_num = 1;
+    repeated PlayerInput inputs = 2;
+}
+
+// 匹配请求
+message MatchRequest {
+    uint32 player_id = 1;
+    int32 mmr = 2;
+}
+
+// 匹配结果
+message MatchResult {
+    repeated uint32 player_ids = 1;
+    uint32 room_id = 2;
+}

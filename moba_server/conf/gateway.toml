@@ -1,0 +1,35 @@
+[network]
+listen_port = 8888
+max_connections = 10000
+ssl_enabled = true
+ssl_cert = "/etc/ssl/moba_gateway.crt"
+ssl_key = "/etc/ssl/moba_gateway.key"
+
+[log]
+level = "info"  # debug|info|warn|error
+path = "/var/log/moba/gateway.log"
+max_size = "100MB"  
+backup_count = 3
+
+[cluster]
+logic_servers = [
+    "192.168.1.101:8889",
+    "192.168.1.102:8889",
+    "192.168.1.103:8889"
+]
+
+[database]
+mysql_host = "db.moba.com"
+mysql_port = 3306
+mysql_user = "moba_gateway"
+mysql_password = "SecurePass123!"
+mysql_dbname = "moba_main"
+
+[security]
+rate_limit = 1000  # 每秒最大请求数
+blacklist_expire = 3600  # 封禁时长(秒)
+
+# 心跳检测配置
+[heartbeat]
+timeout = 30  # 客户端超时时间(秒)
+check_interval = 5  # 检测间隔(秒)

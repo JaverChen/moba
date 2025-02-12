@@ -1,0 +1,33 @@
+[matching]
+max_players = 5  # 每局最大玩家数
+search_radius = 200  # MMR匹配范围
+timeout = 300  # 匹配超时时间(秒)
+retry_count = 3  # 失败重试次数
+
+[rating]
+initial_mmr = 1000  # 初始MMR
+mmr_step = 25  # 每局MMR变化基数
+max_mmr_diff = 500  # 最大允许MMR差
+
+[redis]
+host = "redis-cluster.moba.com"
+port = 6379
+password = "RedisPass123!"
+queue_key = "match_queue"  # 匹配队列Redis键名
+pool_size = 10
+
+[log]
+level = "debug"  # 匹配系统需要更详细日志
+path = "/var/log/moba/match.log"
+rotation_size = "20MB"
+
+# 机器人配置（测试用） 
+[bot]
+enable = false
+fill_threshold = 10  # 当匹配超过N秒时填充机器人
+bot_mmr_range = [800, 1200]  # 机器人MMR范围
+
+# 性能监控
+[monitor]
+stats_interval = 60  # 统计间隔(秒)
+max_queue_length = 1000  # 队列最大长度预警阈值
