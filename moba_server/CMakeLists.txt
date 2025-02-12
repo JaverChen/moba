@@ -9,6 +9,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 # Protocol Buffer生成目录
 set(PROTO_GEN_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/proto/generated)
 file(MAKE_DIRECTORY ${PROTO_GEN_DIR})  # 确保目录存在
+find_package(Protobuf REQUIRED)
+set(Protobuf_IMPORT_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/src/proto)
 
 # 依赖查找
 find_package(Boost 1.71.0 REQUIRED COMPONENTS system)
@@ -30,18 +32,21 @@ find_library(MYSQL_LIBRARY
 set(HIREDIS_INCLUDE_DIR "/usr/include/hiredis")
 set(HIREDIS_LIBRARY "/usr/lib/x86_64-linux-gnu/libhiredis.so")
 
+# 协议生成
+protobuf_generate_cpp(
+    PROTO_SRCS 
+    PROTO_HDRS
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/proto/game.proto
+    PROTOC_OUT_DIR ${PROTO_GEN_DIR}
+)
+
 # 包含目录
 include_directories(
     ${Boost_INCLUDE_DIRS}
     ${MYSQL_INCLUDE_DIR}
     ${HIREDIS_INCLUDE_DIR}
     ${PROTO_GEN_DIR}
-)
-
-# 协议生成
-protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/proto/game.proto
-    OUTPUT_DIRECTORY ${PROTO_GEN_DIR}  # 正确参数
+    ${Protobuf_INCLUDE_DIRS}
 )
 
 # 网关服务
@@ -50,14 +55,14 @@ add_executable(Gateway
     src/gateway/connection_manager.cpp
     src/gateway/ssl_wrapper.cpp
     src/common/protocol.cpp
-    ${PROTO_SRCS}  # 包含生成的源文件
+    ${PROTO_SRCS}
 )
 
 target_link_libraries(Gateway
+    protobuf::libprotobuf
     ${Boost_LIBRARIES}
     ${MYSQL_LIBRARY}
     ${HIREDIS_LIBRARY}
-    protobuf::libprotobuf
     OpenSSL::SSL
     pthread
 )

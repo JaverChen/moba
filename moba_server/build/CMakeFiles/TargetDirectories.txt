@@ -1,7 +1,0 @@
-/mnt/shared/build/CMakeFiles/install/strip.dir
-/mnt/shared/build/CMakeFiles/install/local.dir
-/mnt/shared/build/CMakeFiles/install.dir
-/mnt/shared/build/CMakeFiles/list_install_components.dir
-/mnt/shared/build/CMakeFiles/rebuild_cache.dir
-/mnt/shared/build/CMakeFiles/edit_cache.dir
-/mnt/shared/build/CMakeFiles/Gateway.dir

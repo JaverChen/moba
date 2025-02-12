@@ -4,6 +4,7 @@
 #include <boost/asio/ssl.hpp>
 #include "connection_manager.h"
 #include "ssl_wrapper.h"
+#include "../common/config_loader.h"
 
 using namespace boost::asio;
 using namespace boost::asio::ip;

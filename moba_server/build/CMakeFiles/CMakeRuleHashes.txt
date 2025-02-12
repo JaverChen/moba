@@ -1,4 +1,0 @@
-# Hashes of file build rules.
-e2c3c4ba4265bfcd61554e02b2607dce OUTPUT_DIRECTORY.pb.h
-8fbc0a62b1720b9b6928a1a703b052d5 game.pb.h
-ecbb012221ed1375a971ea6b28ccfc5a generated.pb.h
