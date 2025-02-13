@@ -15,37 +15,13 @@ public:
         return pointer(new Connection(std::move(socket)));
     }
 
-    void Start() {
-        // 启动异步读写
-        DoRead();
-    }
-
-    void Stop() {
-        boost::system::error_code ec;
-        socket_.lowest_layer().shutdown(boost::asio::ip::tcp::socket::shutdown_both, ec);
-        socket_.lowest_layer().close();
-    }
+    void Start();
+    void Stop();
 
 private:
-    explicit Connection(socket_type&& socket)
-        : socket_(std::move(socket)) {}
-
-    void DoRead() {
-        auto self(shared_from_this());
-        socket_.async_read_some(
-            boost::asio::buffer(buffer_),
-            [this, self](boost::system::error_code ec, std::size_t length) {
-                if (!ec) {
-                    // 处理接收数据
-                    ProcessData(length);
-                    DoRead();
-                }
-            });
-    }
-
-    void ProcessData(size_t length) {
-        // 实现协议解析逻辑
-    }
+    explicit Connection(socket_type&& socket);
+    void DoRead();
+    void ProcessData(size_t length);
 
     socket_type socket_;
     std::array<char, 1024> buffer_;

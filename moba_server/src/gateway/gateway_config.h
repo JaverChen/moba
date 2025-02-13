@@ -1,10 +1,10 @@
 struct GatewayConfig {
     struct Network {
-        int listen_port;
+        int listen_port = 8888; // 默认值
+        std::string ssl_cert = "server.crt";
+        std::string ssl_key = "server.key";
         int max_connections;
         bool ssl_enabled;
-        std::string ssl_cert;
-        std::string ssl_key;
     };
 
     struct Database {

@@ -8,6 +8,7 @@
 
 class FrameSync {
 public:
+    void RunSyncLoop();
     void AddInput(const std::vector<char>& data);
     std::vector<char> GetNextFrame();
 
