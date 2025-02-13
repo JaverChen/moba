@@ -40,6 +40,7 @@ set(HIREDIS_INCLUDE_DIR "/usr/include/hiredis")
 set(HIREDIS_LIBRARY "/usr/lib/x86_64-linux-gnu/libhiredis.so")
 # 包含目录
 include_directories(
+    ${CMAKE_SOURCE_DIR}/third_party/tomlplusplus/include
     ${Boost_INCLUDE_DIRS}
     ${MYSQL_INCLUDE_DIR}
     ${HIREDIS_INCLUDE_DIR}
@@ -89,6 +90,7 @@ target_link_libraries(Logic
     protobuf::libprotobuf
     ${HIREDIS_LIBRARIES}
     ${CMAKE_THREAD_LIBS_INIT}
+    ${OPENSSL_LIBRARIES}
 )
 
 # 安装规则

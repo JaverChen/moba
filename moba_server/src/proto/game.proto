@@ -22,14 +22,12 @@ message FrameData {
     repeated PlayerInput inputs = 2;
 }
 
-// 匹配请求
-message MatchRequest {
-    uint32 player_id = 1;
-    int32 mmr = 2;
+message GameState {
+    repeated Player players = 1;
+    uint32 current_frame = 2;
 }
 
-// 匹配结果
-message MatchResult {
-    repeated uint32 player_ids = 1;
-    uint32 room_id = 2;
+message Player {
+    uint32 id = 1;
+    Vector3 position = 2;
 }

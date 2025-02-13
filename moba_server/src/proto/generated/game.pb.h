@@ -49,12 +49,12 @@ namespace moba {
 class FrameData;
 class FrameDataDefaultTypeInternal;
 extern FrameDataDefaultTypeInternal _FrameData_default_instance_;
-class MatchRequest;
-class MatchRequestDefaultTypeInternal;
-extern MatchRequestDefaultTypeInternal _MatchRequest_default_instance_;
-class MatchResult;
-class MatchResultDefaultTypeInternal;
-extern MatchResultDefaultTypeInternal _MatchResult_default_instance_;
+class GameState;
+class GameStateDefaultTypeInternal;
+extern GameStateDefaultTypeInternal _GameState_default_instance_;
+class Player;
+class PlayerDefaultTypeInternal;
+extern PlayerDefaultTypeInternal _Player_default_instance_;
 class PlayerInput;
 class PlayerInputDefaultTypeInternal;
 extern PlayerInputDefaultTypeInternal _PlayerInput_default_instance_;
@@ -65,8 +65,8 @@ extern Vector3DefaultTypeInternal _Vector3_default_instance_;
 namespace google {
 namespace protobuf {
 template<> ::moba::FrameData* Arena::CreateMaybeMessage<::moba::FrameData>(Arena*);
-template<> ::moba::MatchRequest* Arena::CreateMaybeMessage<::moba::MatchRequest>(Arena*);
-template<> ::moba::MatchResult* Arena::CreateMaybeMessage<::moba::MatchResult>(Arena*);
+template<> ::moba::GameState* Arena::CreateMaybeMessage<::moba::GameState>(Arena*);
+template<> ::moba::Player* Arena::CreateMaybeMessage<::moba::Player>(Arena*);
 template<> ::moba::PlayerInput* Arena::CreateMaybeMessage<::moba::PlayerInput>(Arena*);
 template<> ::moba::Vector3* Arena::CreateMaybeMessage<::moba::Vector3>(Arena*);
 }  // namespace protobuf
@@ -445,24 +445,24 @@ class FrameData : public ::google::protobuf::Message /* @@protoc_insertion_point
 };
 // -------------------------------------------------------------------
 
-class MatchRequest : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:moba.MatchRequest) */ {
+class GameState : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:moba.GameState) */ {
  public:
-  MatchRequest();
-  virtual ~MatchRequest();
+  GameState();
+  virtual ~GameState();
 
-  MatchRequest(const MatchRequest& from);
+  GameState(const GameState& from);
 
-  inline MatchRequest& operator=(const MatchRequest& from) {
+  inline GameState& operator=(const GameState& from) {
     CopyFrom(from);
     return *this;
   }
   #if LANG_CXX11
-  MatchRequest(MatchRequest&& from) noexcept
-    : MatchRequest() {
+  GameState(GameState&& from) noexcept
+    : GameState() {
     *this = ::std::move(from);
   }
 
-  inline MatchRequest& operator=(MatchRequest&& from) noexcept {
+  inline GameState& operator=(GameState&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -472,34 +472,34 @@ class MatchRequest : public ::google::protobuf::Message /* @@protoc_insertion_po
   }
   #endif
   static const ::google::protobuf::Descriptor* descriptor();
-  static const MatchRequest& default_instance();
+  static const GameState& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const MatchRequest* internal_default_instance() {
-    return reinterpret_cast<const MatchRequest*>(
-               &_MatchRequest_default_instance_);
+  static inline const GameState* internal_default_instance() {
+    return reinterpret_cast<const GameState*>(
+               &_GameState_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     3;
 
-  void Swap(MatchRequest* other);
-  friend void swap(MatchRequest& a, MatchRequest& b) {
+  void Swap(GameState* other);
+  friend void swap(GameState& a, GameState& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline MatchRequest* New() const final {
-    return CreateMaybeMessage<MatchRequest>(NULL);
+  inline GameState* New() const final {
+    return CreateMaybeMessage<GameState>(NULL);
   }
 
-  MatchRequest* New(::google::protobuf::Arena* arena) const final {
-    return CreateMaybeMessage<MatchRequest>(arena);
+  GameState* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<GameState>(arena);
   }
   void CopyFrom(const ::google::protobuf::Message& from) final;
   void MergeFrom(const ::google::protobuf::Message& from) final;
-  void CopyFrom(const MatchRequest& from);
-  void MergeFrom(const MatchRequest& from);
+  void CopyFrom(const GameState& from);
+  void MergeFrom(const GameState& from);
   void Clear() final;
   bool IsInitialized() const final;
 
@@ -516,7 +516,7 @@ class MatchRequest : public ::google::protobuf::Message /* @@protoc_insertion_po
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(MatchRequest* other);
+  void InternalSwap(GameState* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -532,47 +532,53 @@ class MatchRequest : public ::google::protobuf::Message /* @@protoc_insertion_po
 
   // accessors -------------------------------------------------------
 
-  // uint32 player_id = 1;
-  void clear_player_id();
-  static const int kPlayerIdFieldNumber = 1;
-  ::google::protobuf::uint32 player_id() const;
-  void set_player_id(::google::protobuf::uint32 value);
+  // repeated .moba.Player players = 1;
+  int players_size() const;
+  void clear_players();
+  static const int kPlayersFieldNumber = 1;
+  ::moba::Player* mutable_players(int index);
+  ::google::protobuf::RepeatedPtrField< ::moba::Player >*
+      mutable_players();
+  const ::moba::Player& players(int index) const;
+  ::moba::Player* add_players();
+  const ::google::protobuf::RepeatedPtrField< ::moba::Player >&
+      players() const;
 
-  // int32 mmr = 2;
-  void clear_mmr();
-  static const int kMmrFieldNumber = 2;
-  ::google::protobuf::int32 mmr() const;
-  void set_mmr(::google::protobuf::int32 value);
+  // uint32 current_frame = 2;
+  void clear_current_frame();
+  static const int kCurrentFrameFieldNumber = 2;
+  ::google::protobuf::uint32 current_frame() const;
+  void set_current_frame(::google::protobuf::uint32 value);
 
-  // @@protoc_insertion_point(class_scope:moba.MatchRequest)
+  // @@protoc_insertion_point(class_scope:moba.GameState)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::uint32 player_id_;
-  ::google::protobuf::int32 mmr_;
+  ::google::protobuf::RepeatedPtrField< ::moba::Player > players_;
+  ::google::protobuf::uint32 current_frame_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::protobuf_game_2eproto::TableStruct;
 };
 // -------------------------------------------------------------------
 
-class MatchResult : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:moba.MatchResult) */ {
+class Player : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:moba.Player) */ {
  public:
-  MatchResult();
-  virtual ~MatchResult();
+  Player();
+  virtual ~Player();
 
-  MatchResult(const MatchResult& from);
+  Player(const Player& from);
 
-  inline MatchResult& operator=(const MatchResult& from) {
+  inline Player& operator=(const Player& from) {
     CopyFrom(from);
     return *this;
   }
   #if LANG_CXX11
-  MatchResult(MatchResult&& from) noexcept
-    : MatchResult() {
+  Player(Player&& from) noexcept
+    : Player() {
     *this = ::std::move(from);
   }
 
-  inline MatchResult& operator=(MatchResult&& from) noexcept {
+  inline Player& operator=(Player&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -582,34 +588,34 @@ class MatchResult : public ::google::protobuf::Message /* @@protoc_insertion_poi
   }
   #endif
   static const ::google::protobuf::Descriptor* descriptor();
-  static const MatchResult& default_instance();
+  static const Player& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const MatchResult* internal_default_instance() {
-    return reinterpret_cast<const MatchResult*>(
-               &_MatchResult_default_instance_);
+  static inline const Player* internal_default_instance() {
+    return reinterpret_cast<const Player*>(
+               &_Player_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     4;
 
-  void Swap(MatchResult* other);
-  friend void swap(MatchResult& a, MatchResult& b) {
+  void Swap(Player* other);
+  friend void swap(Player& a, Player& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline MatchResult* New() const final {
-    return CreateMaybeMessage<MatchResult>(NULL);
+  inline Player* New() const final {
+    return CreateMaybeMessage<Player>(NULL);
   }
 
-  MatchResult* New(::google::protobuf::Arena* arena) const final {
-    return CreateMaybeMessage<MatchResult>(arena);
+  Player* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<Player>(arena);
   }
   void CopyFrom(const ::google::protobuf::Message& from) final;
   void MergeFrom(const ::google::protobuf::Message& from) final;
-  void CopyFrom(const MatchResult& from);
-  void MergeFrom(const MatchResult& from);
+  void CopyFrom(const Player& from);
+  void MergeFrom(const Player& from);
   void Clear() final;
   bool IsInitialized() const final;
 
@@ -626,7 +632,7 @@ class MatchResult : public ::google::protobuf::Message /* @@protoc_insertion_poi
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(MatchResult* other);
+  void InternalSwap(Player* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -642,31 +648,30 @@ class MatchResult : public ::google::protobuf::Message /* @@protoc_insertion_poi
 
   // accessors -------------------------------------------------------
 
-  // repeated uint32 player_ids = 1;
-  int player_ids_size() const;
-  void clear_player_ids();
-  static const int kPlayerIdsFieldNumber = 1;
-  ::google::protobuf::uint32 player_ids(int index) const;
-  void set_player_ids(int index, ::google::protobuf::uint32 value);
-  void add_player_ids(::google::protobuf::uint32 value);
-  const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
-      player_ids() const;
-  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
-      mutable_player_ids();
+  // .moba.Vector3 position = 2;
+  bool has_position() const;
+  void clear_position();
+  static const int kPositionFieldNumber = 2;
+  private:
+  const ::moba::Vector3& _internal_position() const;
+  public:
+  const ::moba::Vector3& position() const;
+  ::moba::Vector3* release_position();
+  ::moba::Vector3* mutable_position();
+  void set_allocated_position(::moba::Vector3* position);
 
-  // uint32 room_id = 2;
-  void clear_room_id();
-  static const int kRoomIdFieldNumber = 2;
-  ::google::protobuf::uint32 room_id() const;
-  void set_room_id(::google::protobuf::uint32 value);
+  // uint32 id = 1;
+  void clear_id();
+  static const int kIdFieldNumber = 1;
+  ::google::protobuf::uint32 id() const;
+  void set_id(::google::protobuf::uint32 value);
 
-  // @@protoc_insertion_point(class_scope:moba.MatchResult)
+  // @@protoc_insertion_point(class_scope:moba.Player)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > player_ids_;
-  mutable int _player_ids_cached_byte_size_;
-  ::google::protobuf::uint32 room_id_;
+  ::moba::Vector3* position_;
+  ::google::protobuf::uint32 id_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::protobuf_game_2eproto::TableStruct;
 };
@@ -889,82 +894,122 @@ FrameData::inputs() const {
 
 // -------------------------------------------------------------------
 
-// MatchRequest
+// GameState
 
-// uint32 player_id = 1;
-inline void MatchRequest::clear_player_id() {
-  player_id_ = 0u;
+// repeated .moba.Player players = 1;
+inline int GameState::players_size() const {
+  return players_.size();
 }
-inline ::google::protobuf::uint32 MatchRequest::player_id() const {
-  // @@protoc_insertion_point(field_get:moba.MatchRequest.player_id)
-  return player_id_;
+inline void GameState::clear_players() {
+  players_.Clear();
 }
-inline void MatchRequest::set_player_id(::google::protobuf::uint32 value) {
-  
-  player_id_ = value;
-  // @@protoc_insertion_point(field_set:moba.MatchRequest.player_id)
+inline ::moba::Player* GameState::mutable_players(int index) {
+  // @@protoc_insertion_point(field_mutable:moba.GameState.players)
+  return players_.Mutable(index);
+}
+inline ::google::protobuf::RepeatedPtrField< ::moba::Player >*
+GameState::mutable_players() {
+  // @@protoc_insertion_point(field_mutable_list:moba.GameState.players)
+  return &players_;
+}
+inline const ::moba::Player& GameState::players(int index) const {
+  // @@protoc_insertion_point(field_get:moba.GameState.players)
+  return players_.Get(index);
+}
+inline ::moba::Player* GameState::add_players() {
+  // @@protoc_insertion_point(field_add:moba.GameState.players)
+  return players_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::moba::Player >&
+GameState::players() const {
+  // @@protoc_insertion_point(field_list:moba.GameState.players)
+  return players_;
 }
 
-// int32 mmr = 2;
-inline void MatchRequest::clear_mmr() {
-  mmr_ = 0;
+// uint32 current_frame = 2;
+inline void GameState::clear_current_frame() {
+  current_frame_ = 0u;
 }
-inline ::google::protobuf::int32 MatchRequest::mmr() const {
-  // @@protoc_insertion_point(field_get:moba.MatchRequest.mmr)
-  return mmr_;
+inline ::google::protobuf::uint32 GameState::current_frame() const {
+  // @@protoc_insertion_point(field_get:moba.GameState.current_frame)
+  return current_frame_;
 }
-inline void MatchRequest::set_mmr(::google::protobuf::int32 value) {
+inline void GameState::set_current_frame(::google::protobuf::uint32 value) {
   
-  mmr_ = value;
-  // @@protoc_insertion_point(field_set:moba.MatchRequest.mmr)
+  current_frame_ = value;
+  // @@protoc_insertion_point(field_set:moba.GameState.current_frame)
 }
 
 // -------------------------------------------------------------------
 
-// MatchResult
+// Player
 
-// repeated uint32 player_ids = 1;
-inline int MatchResult::player_ids_size() const {
-  return player_ids_.size();
+// uint32 id = 1;
+inline void Player::clear_id() {
+  id_ = 0u;
 }
-inline void MatchResult::clear_player_ids() {
-  player_ids_.Clear();
+inline ::google::protobuf::uint32 Player::id() const {
+  // @@protoc_insertion_point(field_get:moba.Player.id)
+  return id_;
 }
-inline ::google::protobuf::uint32 MatchResult::player_ids(int index) const {
-  // @@protoc_insertion_point(field_get:moba.MatchResult.player_ids)
-  return player_ids_.Get(index);
-}
-inline void MatchResult::set_player_ids(int index, ::google::protobuf::uint32 value) {
-  player_ids_.Set(index, value);
-  // @@protoc_insertion_point(field_set:moba.MatchResult.player_ids)
-}
-inline void MatchResult::add_player_ids(::google::protobuf::uint32 value) {
-  player_ids_.Add(value);
-  // @@protoc_insertion_point(field_add:moba.MatchResult.player_ids)
-}
-inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
-MatchResult::player_ids() const {
-  // @@protoc_insertion_point(field_list:moba.MatchResult.player_ids)
-  return player_ids_;
-}
-inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
-MatchResult::mutable_player_ids() {
-  // @@protoc_insertion_point(field_mutable_list:moba.MatchResult.player_ids)
-  return &player_ids_;
-}
-
-// uint32 room_id = 2;
-inline void MatchResult::clear_room_id() {
-  room_id_ = 0u;
-}
-inline ::google::protobuf::uint32 MatchResult::room_id() const {
-  // @@protoc_insertion_point(field_get:moba.MatchResult.room_id)
-  return room_id_;
-}
-inline void MatchResult::set_room_id(::google::protobuf::uint32 value) {
+inline void Player::set_id(::google::protobuf::uint32 value) {
   
-  room_id_ = value;
-  // @@protoc_insertion_point(field_set:moba.MatchResult.room_id)
+  id_ = value;
+  // @@protoc_insertion_point(field_set:moba.Player.id)
+}
+
+// .moba.Vector3 position = 2;
+inline bool Player::has_position() const {
+  return this != internal_default_instance() && position_ != NULL;
+}
+inline void Player::clear_position() {
+  if (GetArenaNoVirtual() == NULL && position_ != NULL) {
+    delete position_;
+  }
+  position_ = NULL;
+}
+inline const ::moba::Vector3& Player::_internal_position() const {
+  return *position_;
+}
+inline const ::moba::Vector3& Player::position() const {
+  const ::moba::Vector3* p = position_;
+  // @@protoc_insertion_point(field_get:moba.Player.position)
+  return p != NULL ? *p : *reinterpret_cast<const ::moba::Vector3*>(
+      &::moba::_Vector3_default_instance_);
+}
+inline ::moba::Vector3* Player::release_position() {
+  // @@protoc_insertion_point(field_release:moba.Player.position)
+  
+  ::moba::Vector3* temp = position_;
+  position_ = NULL;
+  return temp;
+}
+inline ::moba::Vector3* Player::mutable_position() {
+  
+  if (position_ == NULL) {
+    auto* p = CreateMaybeMessage<::moba::Vector3>(GetArenaNoVirtual());
+    position_ = p;
+  }
+  // @@protoc_insertion_point(field_mutable:moba.Player.position)
+  return position_;
+}
+inline void Player::set_allocated_position(::moba::Vector3* position) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete position_;
+  }
+  if (position) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      position = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, position, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  position_ = position;
+  // @@protoc_insertion_point(field_set_allocated:moba.Player.position)
 }
 
 #ifdef __GNUC__

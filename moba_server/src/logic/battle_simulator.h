@@ -2,15 +2,15 @@
 #define BATTLE_SIMULATOR_H
 
 #include <vector>
-#include "protocol.h"
+#include "../common/protocol.h"
 
 class BattleSimulator {
 public:
-    void Simulate(const std::vector<PlayerInput>& inputs);
-    GameState GetState() const;
+    void Simulate(const std::vector<moba::PlayerInput>& inputs);
+    moba::GameState GetState() const;
 
 private:
-    GameState state_;
+    moba::GameState state_;
 };
 
 #endif

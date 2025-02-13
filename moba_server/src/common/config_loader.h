@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include <toml++/toml.h>
+#include <toml.hpp>
 
 class ConfigLoader {
 public:

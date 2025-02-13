@@ -2,7 +2,7 @@
 #define PROTOCOL_H
 
 #include <vector>
-#include "proto/generated/game.pb.h"
+#include "../proto/generated/game.pb.h"
 
 class Protocol {
 public:
