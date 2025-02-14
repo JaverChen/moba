@@ -23,32 +23,6 @@ find_package(Boost 1.71.0 REQUIRED COMPONENTS system)
 find_package(OpenSSL REQUIRED)
 find_package(Threads REQUIRED)
 
-#[[
-# MySQL配置
-find_path(MYSQL_INCLUDE_DIR mysql.h
-    PATHS /usr/include/mysql
-    REQUIRED
-)
-find_library(MYSQL_LIBRARY
-    NAMES mysqlclient
-    PATHS /usr/lib/x86_64-linux-gnu
-    REQUIRED
-)
-
-# Hiredis配置
-set(HIREDIS_INCLUDE_DIR "/usr/include/hiredis")
-set(HIREDIS_LIBRARY "/usr/lib/x86_64-linux-gnu/libhiredis.so")
-# 包含目录
-include_directories(
-    ${CMAKE_SOURCE_DIR}/tomlplusplus/include
-    ${Boost_INCLUDE_DIRS}
-    ${MYSQL_INCLUDE_DIR}
-    ${HIREDIS_INCLUDE_DIR}
-    ${PROTO_GEN_DIR}
-    ${Protobuf_INCLUDE_DIRS}
-)
-]]
-
 # MySQL/Hiredis手动配置
 set(MYSQL_INCLUDE_DIR "/usr/include/mysql")
 set(MYSQL_LIBRARY "/usr/lib/x86_64-linux-gnu/libmysqlclient.so")
@@ -73,7 +47,7 @@ target_link_libraries(Gateway
     protobuf::libprotobuf
     ${Boost_LIBRARIES}
     ${MYSQL_LIBRARY}
-    ${HIREDIS_LIBRARY}
+    ${HIREDIS_LIB}
     OpenSSL::SSL
     ${CMAKE_THREAD_LIBS_INIT}
 )
@@ -89,7 +63,7 @@ add_executable(Logic
 )
 target_link_libraries(Logic
     protobuf::libprotobuf
-    ${HIREDIS_LIBRARIES}
+    ${HIREDIS_LIB}
     ${CMAKE_THREAD_LIBS_INIT}
     ${OPENSSL_LIBRARIES}
 )

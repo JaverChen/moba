@@ -1,6 +1,6 @@
 // src/gateway/connection_manager.cpp
 #include "connection_manager.h"
-#include "connection.h"  // 明确包含头文件
+#include "connection.h"
 
 void ConnectionManager::Start(Connection::pointer c) {
     std::lock_guard<std::mutex> lock(mutex_);
