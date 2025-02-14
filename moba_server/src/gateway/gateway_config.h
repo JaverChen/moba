@@ -1,8 +1,12 @@
+#pragma once
+#include <string>
+#include <toml++/toml.hpp>
+
 struct GatewayConfig {
     struct Network {
-        int listen_port = 8888; // 默认值
-        std::string ssl_cert = "server.crt";
-        std::string ssl_key = "server.key";
+        int listen_port = 8888;
+        std::string ssl_cert;
+        std::string ssl_key;
         int max_connections;
         bool ssl_enabled;
     };
@@ -17,28 +21,32 @@ struct GatewayConfig {
 
     Network network;
     Database database;
-    // 其他配置段...
+
+    // 添加静态解析方法
+    static GatewayConfig parse(const toml::table& tbl);
 };
 
-// TOML反序列化特化
-template<>
-struct toml::from<GatewayConfig> {
-    static GatewayConfig from_toml(const toml::table& tbl) {
-        return GatewayConfig{
-            .network = {
-                .listen_port = tbl["network"]["listen_port"].value_or(8888),
-                .max_connections = tbl["network"]["max_connections"].value_or(1000),
-                .ssl_enabled = tbl["network"]["ssl_enabled"].value_or(false),
-                .ssl_cert = tbl["network"]["ssl_cert"].value_or(""),
-                .ssl_key = tbl["network"]["ssl_key"].value_or("")
-            },
-            .database = {
-                .host = tbl["database"]["mysql_host"].value_or("localhost"),
-                .port = tbl["database"]["mysql_port"].value_or(3306),
-                .user = tbl["database"]["mysql_user"].value_or("root"),
-                .password = tbl["database"]["mysql_password"].value_or(""),
-                .dbname = tbl["database"]["mysql_dbname"].value_or("moba")
-            }
-        };
+// 实现解析方法
+inline GatewayConfig GatewayConfig::parse(const toml::table& tbl) {
+    GatewayConfig config;
+    
+    // 解析 Network 配置
+    if (auto network_table = tbl["network"].as_table()) {
+        config.network.listen_port      = network_table->get("listen_port")->value_or(8888);
+        config.network.max_connections  = network_table->get("max_connections")->value_or(1000);
+        config.network.ssl_enabled      = network_table->get("ssl_enabled")->value_or(false);
+        config.network.ssl_cert         = network_table->get("ssl_cert")->value_or("");
+        config.network.ssl_key          = network_table->get("ssl_key")->value_or("");
     }
-};
+
+    // 解析 Database 配置
+    if (auto db_table = tbl["database"].as_table()) {
+        config.database.host     = db_table->get("mysql_host")->value_or("localhost");
+        config.database.port     = db_table->get("mysql_port")->value_or(3306);
+        config.database.user     = db_table->get("mysql_user")->value_or("root");
+        config.database.password = db_table->get("mysql_password")->value_or("");
+        config.database.dbname   = db_table->get("mysql_dbname")->value_or("moba");
+    }
+
+    return config;
+}

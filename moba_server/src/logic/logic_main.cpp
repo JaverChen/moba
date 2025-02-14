@@ -1,4 +1,6 @@
 #include "frame_sync.h"
+#include "../common/redis_pool.h"
+#include "logic_config.h"
 #include "../common/config_loader.h"
 
 int main() {

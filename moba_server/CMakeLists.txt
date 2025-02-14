@@ -40,7 +40,7 @@ set(HIREDIS_INCLUDE_DIR "/usr/include/hiredis")
 set(HIREDIS_LIBRARY "/usr/lib/x86_64-linux-gnu/libhiredis.so")
 # 包含目录
 include_directories(
-    ${CMAKE_SOURCE_DIR}/third_party/tomlplusplus/include
+    ${CMAKE_SOURCE_DIR}/tomlplusplus/include
     ${Boost_INCLUDE_DIRS}
     ${MYSQL_INCLUDE_DIR}
     ${HIREDIS_INCLUDE_DIR}
@@ -80,6 +80,7 @@ target_link_libraries(Gateway
 # 逻辑服务
 add_executable(Logic
     src/logic/logic_main.cpp
+    src/logic/logic_config.cpp
     src/logic/frame_sync.cpp
     src/logic/battle_simulator.cpp
     src/common/protocol.cpp

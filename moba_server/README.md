@@ -25,6 +25,8 @@ moba_server/
 │   │   ├── frame_sync.cpp
 │   │   ├── battle_simulator.h
 │   │   ├── battle_simulator.cpp
+│   │   ├── logic_config.h
+│   │   ├── logic_config.cpp
 │   │   └── logic_main.cpp
 │   └── proto/
 │       ├── game.proto

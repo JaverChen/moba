@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include <toml.hpp>
+#include <toml++/toml.hpp>
 
 class ConfigLoader {
 public:
@@ -8,7 +8,7 @@ public:
     static T Load(const std::string& path) {
         try {
             auto config = toml::parse_file(path);
-            return toml::get<T>(config);
+            return T::parse(*config.as_table());
         } catch (const toml::parse_error& err) {
             throw std::runtime_error("Config parse error: " 
                 + std::string(err.description()));
