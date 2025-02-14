@@ -6,19 +6,19 @@
 #include "gateway_config.h"
 #include "ssl_wrapper.h"
 #include "../common/config_loader.h"
+#include <iostream>
+#include <string>
 
 using namespace boost::asio;
 using namespace boost::asio::ip;
 
 class Gateway {
 public:
-    void ReloadConfig(); 
-    
     Gateway(io_context& io, const GatewayConfig& config)
         : acceptor_(io, tcp::endpoint(tcp::v4(), config.network.listen_port)),
-            context_(ssl::context::tls_server),
-            conn_mgr_() {
-        // 从配置加载证书
+          context_(ssl::context::tls_server),
+          conn_mgr_() {
+        // 加载证书
         context_.use_certificate_file(config.network.ssl_cert, ssl::context::pem);
         context_.use_private_key_file(config.network.ssl_key, ssl::context::pem);
         StartAccept();
@@ -29,20 +29,21 @@ private:
         acceptor_.async_accept(
             [this](boost::system::error_code ec, tcp::socket socket) {
                 if (!ec) {
+                    // 使用 shared_ptr 管理 ssl_socket
                     auto ssl_socket = std::make_shared<ssl::stream<tcp::socket>>(
-                        std::move(socket), context_);
-                    // 使用weak_ptr避免循环引用
-                    std::weak_ptr<ssl::stream<tcp::socket>> weak_ssl = ssl_socket;
+                        std::move(socket), context_
+                    );
+                    // 异步握手
                     ssl_socket->async_handshake(
                         ssl::stream_base::server,
-                        [this, weak_ssl](const auto& ec) {
-                            if (auto ssl_socket = weak_ssl.lock()) {
-                                if (!ec) {
-                                    auto conn = Connection::Create(std::move(*ssl_socket));
-                                    conn_mgr_.Start(conn);
-                                }
+                        [this, ssl_socket](const boost::system::error_code& ec) {
+                            if (!ec) {
+                                // 将 ssl_socket 所有权传递给 Connection
+                                auto conn = Connection::Create(ssl_socket);
+                                conn_mgr_.Start(conn);
                             }
-                        });
+                        }
+                    );
                 }
                 StartAccept();
             });
@@ -53,15 +54,18 @@ private:
     ConnectionManager conn_mgr_;
 };
 
-// void Gateway::ReloadConfig() {
-//     auto new_config = ConfigLoader::Load<GatewayConfig>(config_path_);
-//     ApplyNewConfig(new_config); // 实现配置生效逻辑
-//     Logger::Info("Configuration reloaded successfully");
-// }
-
-int main() {
+int main(int argc, char* argv[]) {
     try {
-        auto config = ConfigLoader::Load<GatewayConfig>("gateway.toml");
+        // 检查命令行参数
+        if (argc < 2) {
+            std::cerr << "Usage: " << argv[0] << " <config_file_path>" << std::endl;
+            return 1;
+        }
+        // 获取配置文件路径
+        std::string config_path = argv[1];
+        std::cout << "Loading config from: " << config_path << std::endl;
+
+        auto config = ConfigLoader::Load<GatewayConfig>(config_path);
         io_context io;
         Gateway server(io, config);
         io.run();

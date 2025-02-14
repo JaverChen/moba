@@ -1,5 +1,10 @@
 #include "redis_pool.h"
 
+RedisPool& RedisPool::Instance() {
+    static RedisPool instance;  // 确保静态实例存在
+    return instance;
+}
+
 void RedisPool::Init(const char* host, int port, int max_conn) {
     max_connections_ = max_conn;
     for (int i = 0; i < max_conn; ++i) {

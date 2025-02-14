@@ -28,13 +28,17 @@ set(MYSQL_INCLUDE_DIR "/usr/include/mysql")
 set(MYSQL_LIBRARY "/usr/lib/x86_64-linux-gnu/libmysqlclient.so")
 set(HIREDIS_LIB "/usr/lib/x86_64-linux-gnu/libhiredis.so")
 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 # 网关服务
 add_executable(Gateway
     src/gateway/gateway_main.cpp
+    src/gateway/connection.cpp
     src/gateway/connection_manager.cpp
     src/gateway/ssl_wrapper.cpp
     src/common/protocol.cpp
+    src/common/redis_pool.cpp
+    src/common/logger.cpp
     ${PROTO_SRCS}
 )
 target_include_directories(Gateway PRIVATE
@@ -45,10 +49,11 @@ target_include_directories(Gateway PRIVATE
 )
 target_link_libraries(Gateway
     protobuf::libprotobuf
-    ${Boost_LIBRARIES}
+    Boost::boost
+    Boost::system
+    OpenSSL::SSL
     ${MYSQL_LIBRARY}
     ${HIREDIS_LIB}
-    OpenSSL::SSL
     ${CMAKE_THREAD_LIBS_INIT}
 )
 # 逻辑服务

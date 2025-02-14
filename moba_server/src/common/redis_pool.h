@@ -8,10 +8,7 @@
 
 class RedisPool {
 public:
-    static RedisPool& Instance() {
-        static RedisPool instance;
-        return instance;
-    }
+    static RedisPool& Instance();
 
     // 删除拷贝构造函数和赋值运算符
     RedisPool(const RedisPool&) = delete;

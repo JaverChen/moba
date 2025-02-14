@@ -1,26 +1,21 @@
-#include "connection.h"
-
-Connection::Connection(socket_type&& socket)
-    : socket_(std::move(socket)) {}
+#include "connection.h" 
 
 void Connection::Start() {
-    // 启动异步读写
     DoRead();
 }
 
 void Connection::Stop() {
     boost::system::error_code ec;
-    socket_.lowest_layer().shutdown(boost::asio::ip::tcp::socket::shutdown_both, ec);
-    socket_.lowest_layer().close();
+    ssl_socket_->lowest_layer().shutdown(boost::asio::ip::tcp::socket::shutdown_both, ec);
+    ssl_socket_->lowest_layer().close();
 }
 
 void Connection::DoRead() {
     auto self(shared_from_this());
-    socket_.async_read_some(
+    ssl_socket_->async_read_some(
         boost::asio::buffer(buffer_),
         [this, self](boost::system::error_code ec, std::size_t length) {
             if (!ec) {
-                // 处理接收数据
                 ProcessData(length);
                 DoRead();
             }

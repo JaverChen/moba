@@ -1,4 +1,5 @@
-sudo apt-get update && apt-get install -y   \
+sudo apt-get update
+sudo apt-get install -y   \
     build-essential  \
     cmake  \
     libboost-all-dev     \
@@ -6,6 +7,9 @@ sudo apt-get update && apt-get install -y   \
     libhiredis-dev     \
     protobuf-compiler     \
     libprotobuf-dev
+
+#安装redis
+sudo apt install redis-server
 
 # 克隆 toml++ 仓库
 git clone https://github.com/marzer/tomlplusplus.git
