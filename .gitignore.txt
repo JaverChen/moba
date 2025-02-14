@@ -1,2 +1,2 @@
-moba_server/tomlplusplus
-moba_server/build
+moba_server/tomlplusplus/
+moba_server/build/
