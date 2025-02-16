@@ -8,9 +8,9 @@ udp_port = 8889  # 帧同步UDP端口
 broadcast_interval = 33  # 广播间隔(ms)
 
 [redis]
-host = "redis-cluster.moba.com"
+host = "127.0.0.1"
 port = 6379
-password = "RedisPass123!"
+password = "123456"
 db_index = 1  # 逻辑服专用DB
 pool_size = 20  # 连接池大小
 

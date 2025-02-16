@@ -1,6 +1,6 @@
 #include "logic_config.h"
 
-LogicConfig LogicConfig::parse(const toml::table& tbl) {
+LogicConfig LogicConfig::parse(const toml::table& tbl, const std::string& config_path) {
     LogicConfig config;
     
     // 解析 Redis 配置

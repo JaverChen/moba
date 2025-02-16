@@ -17,6 +17,12 @@ int main(int argc, char* argv[]) {
         std::cout << "Loading config from: " << config_path << std::endl;
         // 加载配置
         auto config = ConfigLoader::Load<LogicConfig>(config_path);
+
+        // 打印配置信息
+        std::cout << "Redis Host: " << config.redis.host << std::endl;
+        std::cout << "Redis Port: " << config.redis.port << std::endl;
+        std::cout << "Redis DB Index: " << config.redis.db_index << std::endl;
+        std::cout << "Redis Pool Size: " << config.redis.pool_size << std::endl;
         
         // 初始化Redis连接池
         RedisPool::Instance().Init(

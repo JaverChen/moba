@@ -18,6 +18,13 @@ public:
         : acceptor_(io, tcp::endpoint(tcp::v4(), config.network.listen_port)),
           context_(ssl::context::tls_server),
           conn_mgr_() {
+        // 检查证书文件是否存在
+        if (!std::filesystem::exists(config.network.ssl_cert)) {
+            throw std::runtime_error("SSL certificate file not found: " + config.network.ssl_cert);
+        }
+        if (!std::filesystem::exists(config.network.ssl_key)) {
+            throw std::runtime_error("SSL private key file not found: " + config.network.ssl_key);
+        }
         // 加载证书
         context_.use_certificate_file(config.network.ssl_cert, ssl::context::pem);
         context_.use_private_key_file(config.network.ssl_key, ssl::context::pem);

@@ -15,5 +15,5 @@ struct LogicConfig {
     RedisConfig redis;
 
     // 添加静态解析方法
-    static LogicConfig parse(const toml::table& tbl);
+    static LogicConfig parse(const toml::table& tbl, const std::string& config_path);
 };
