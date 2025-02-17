@@ -17,7 +17,8 @@ public:
     Gateway(io_context& io, const GatewayConfig& config)
         : acceptor_(io, tcp::endpoint(tcp::v4(), config.network.listen_port)),
           context_(ssl::context::tls_server),
-          conn_mgr_() {
+          conn_mgr_() 
+    {
         // 检查证书文件是否存在
         if (!std::filesystem::exists(config.network.ssl_cert)) {
             throw std::runtime_error("SSL certificate file not found: " + config.network.ssl_cert);
@@ -28,6 +29,11 @@ public:
         // 加载证书
         context_.use_certificate_file(config.network.ssl_cert, ssl::context::pem);
         context_.use_private_key_file(config.network.ssl_key, ssl::context::pem);
+
+        // 添加启动日志
+        Logger::Info("Gateway starting on port " + std::to_string(config.network.listen_port));
+        Logger::Info("SSL enabled: " + std::to_string(config.network.ssl_enabled));
+
         StartAccept();
     }
 
@@ -51,6 +57,9 @@ private:
                             }
                         }
                     );
+                }else{
+                    // 添加错误日志
+                    Logger::Info("Accept error: " + ec.message());
                 }
                 StartAccept();
             });
@@ -75,6 +84,13 @@ int main(int argc, char* argv[]) {
         auto config = ConfigLoader::Load<GatewayConfig>(config_path);
         io_context io;
         Gateway server(io, config);
+
+         // 添加端口占用检查
+        if (config.network.listen_port <= 0 || config.network.listen_port > 65535) {
+            throw std::runtime_error("Invalid port number");
+        }
+
+        Logger::Info("Gateway running on port " + std::to_string(config.network.listen_port));
         io.run();
     } catch (std::exception& e) {
         std::cerr << "Gateway error: " << e.what() << std::endl;

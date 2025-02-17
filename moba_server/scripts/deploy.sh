@@ -23,10 +23,14 @@ openssl req -new -key moba_gateway.key -out moba_gateway.csr \
 # 生成自签名证书（有效期 365 天）
 openssl x509 -req -days 365 -in moba_gateway.csr -signkey moba_gateway.key -out moba_gateway.crt
 # 清理 CSR 文件（可选）
-rm moba_gateway.csr
+sudo rm moba_gateway.csr
 #权限设置
-chmod 644 /etc/ssl/moba/moba_gateway.crt  # 证书可读
-chmod 600 /etc/ssl/moba/moba_gateway.key  # 私钥仅所有者可读
+sudo chmod 644 /etc/ssl/moba/moba_gateway.crt  # 证书可读
+sudo chmod 600 /etc/ssl/moba/moba_gateway.key  # 私钥仅所有者可读
+sudo chown $USER:$USER /etc/ssl/moba/moba_gateway.key
+
+#开放端口
+sudo ufw allow 8888/tcp
 
 # 在当前项目根路径下
 
