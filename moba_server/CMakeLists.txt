@@ -22,6 +22,7 @@ protobuf_generate_cpp(
 find_package(Boost 1.71.0 REQUIRED COMPONENTS system)
 find_package(OpenSSL REQUIRED)
 find_package(Threads REQUIRED)
+find_package(fmt REQUIRED)
 
 # MySQL/Hiredis手动配置
 set(MYSQL_INCLUDE_DIR "/usr/include/mysql")
@@ -52,6 +53,7 @@ target_link_libraries(Gateway
     Boost::boost
     Boost::system
     OpenSSL::SSL
+    fmt::fmt
     ${MYSQL_LIBRARY}
     ${HIREDIS_LIB}
     ${CMAKE_THREAD_LIBS_INIT}
@@ -68,6 +70,7 @@ add_executable(Logic
 )
 target_link_libraries(Logic
     protobuf::libprotobuf
+    fmt::fmt
     ${HIREDIS_LIB}
     ${CMAKE_THREAD_LIBS_INIT}
     ${OPENSSL_LIBRARIES}

@@ -20,8 +20,17 @@ struct GatewayConfig {
         std::string dbname;
     };
 
+    struct Log {
+        std::string path = "gateway.log";
+        std::string level = "info";
+        std::string max_size = "100MB";
+        int backup_count = 3;
+        bool daemon_mode = false;
+    };
+
     Network network;
     Database database;
+    Log log;
 
     // 添加静态解析方法
     static GatewayConfig parse(const toml::table& tbl, const std::string& config_path);
@@ -67,6 +76,23 @@ inline GatewayConfig GatewayConfig::parse(const toml::table& tbl, const std::str
         config.database.user     = db_table->get("mysql_user")->value_or("root");
         config.database.password = db_table->get("mysql_password")->value_or("");
         config.database.dbname   = db_table->get("mysql_dbname")->value_or("moba");
+    }
+
+    // 日志配置解析
+    if (auto log_table = tbl["log"].as_table()) {
+        config.log.level = log_table->get("level")->value_or("info");
+        config.log.path = log_table->get("path")->value_or("");
+        config.log.max_size = log_table->get("max_size")->value_or("100MB");
+        config.log.backup_count = log_table->get("backup_count")->value_or(3);
+        config.log.daemon_mode = log_table->get("daemon_mode")->value_or(false);
+
+       // 处理相对路径
+       std::filesystem::path config_dir = std::filesystem::path(config_path).parent_path();
+       std::filesystem::path log_path(config.log.path);
+       if (log_path.is_relative()) {
+           log_path = config_dir / log_path;
+           config.log.path = log_path.lexically_normal().string();
+       }
     }
 
     return config;

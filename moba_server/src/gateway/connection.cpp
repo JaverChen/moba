@@ -35,7 +35,7 @@ void Connection::ProcessData(size_t length) {
         RedisPool::Instance().ReleaseConnection(redis_conn);
         
     } catch (const std::exception& e) {
-        Logger::Info("Invalid data format: " + std::string(e.what()));
+        LOG_INFO("Invalid data format: " + std::string(e.what()));
         Stop();
     }
 }

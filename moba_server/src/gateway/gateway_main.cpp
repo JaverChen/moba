@@ -31,8 +31,8 @@ public:
         context_.use_private_key_file(config.network.ssl_key, ssl::context::pem);
 
         // 添加启动日志
-        Logger::Info("Gateway starting on port " + std::to_string(config.network.listen_port));
-        Logger::Info("SSL enabled: " + std::to_string(config.network.ssl_enabled));
+        LOG_INFO("Gateway starting on port " + std::to_string(config.network.listen_port));
+        LOG_INFO("SSL enabled: " + std::to_string(config.network.ssl_enabled));
 
         StartAccept();
     }
@@ -59,7 +59,7 @@ private:
                     );
                 }else{
                     // 添加错误日志
-                    Logger::Info("Accept error: " + ec.message());
+                    LOG_INFO("Accept error: " + ec.message());
                 }
                 StartAccept();
             });
@@ -72,28 +72,32 @@ private:
 
 int main(int argc, char* argv[]) {
     try {
-        // 检查命令行参数
-        if (argc < 2) {
-            std::cerr << "Usage: " << argv[0] << " <config_file_path>" << std::endl;
-            return 1;
-        }
-        // 获取配置文件路径
-        std::string config_path = argv[1];
-        std::cout << "Loading config from: " << config_path << std::endl;
+        auto config = ConfigLoader::Load<GatewayConfig>("../conf/gateway.toml");
 
-        auto config = ConfigLoader::Load<GatewayConfig>(config_path);
+        // 初始化日志
+        Logger::Config log_config{
+            .path = config.log.path,
+            .level = config.log.level,
+            .max_size = config.log.max_size,
+            .backup_count = config.log.backup_count,
+            .daemon_mode = config.log.daemon_mode
+        };
+        Logger::Init(log_config);
+
+        // 服务器初始化
+        LOG_INFO("Starting gateway server...");
+        LOG_DEBUG("Network config: port={}, ssl={}", 
+                config.network.listen_port, 
+                config.network.ssl_enabled);
+        // 启动服务器
         io_context io;
         Gateway server(io, config);
 
-         // 添加端口占用检查
-        if (config.network.listen_port <= 0 || config.network.listen_port > 65535) {
-            throw std::runtime_error("Invalid port number");
-        }
-
-        Logger::Info("Gateway running on port " + std::to_string(config.network.listen_port));
+        LOG_INFO("Server started on port {}", config.network.listen_port); 
         io.run();
     } catch (std::exception& e) {
-        std::cerr << "Gateway error: " << e.what() << std::endl;
+        LOG_ERROR("Fatal error: " + std::string(e.what()));
+        return EXIT_FAILURE;
     }
-    return 0;
+    return EXIT_SUCCESS;
 }
