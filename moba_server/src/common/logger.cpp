@@ -4,6 +4,9 @@
 #include <cstdio>
 #include <filesystem>
 #include <algorithm>
+#include <unistd.h>
+#include <fmt/format.h>
+#include <sys/stat.h>
 
 using namespace std::chrono;
 
@@ -14,7 +17,6 @@ std::atomic<LogLevel> Logger::current_level_(INFO);
 Logger::Config Logger::current_config_;
 
 void Logger::Init(const Config& config) {
-    std::lock_guard<std::mutex> lock(log_mutex_);
     current_config_ = config;
 
     // 设置日志级别
@@ -24,9 +26,6 @@ void Logger::Init(const Config& config) {
     else if (level == "warn") current_level_ = WARN;
     else if (level == "error") current_level_ = ERROR;
     else current_level_ = INFO;
-
-    // 守护进程模式处理
-    if (config.daemon_mode) Daemonize();
 
     // 处理日志路径
     std::filesystem::path log_path(config.path);
@@ -48,14 +47,15 @@ void Logger::Init(const Config& config) {
 
     // 初始日志
     Log(INFO, "Logger initialized (Level: " + config.level + ")");
+
+    // 守护进程模式处理
+    if (config.daemon_mode) Daemonize();
 }
 
 void Logger::Log(LogLevel level, const std::string& message) {
     if (level < current_level_.load()) return;
 
-    std::lock_guard<std::mutex> lock(log_mutex_);
-    
-    std::string entry = GetTimestamp() + " [" + LevelToString(level) + "] " + message;
+    std::lock_guard<std::mutex> lock(log_mutex_); 
 
     // 非守护模式输出到控制台
     if (!current_config_.daemon_mode) {
@@ -155,5 +155,9 @@ std::string Logger::GetTimestamp() {
 }
 
 std::string Logger::FormatMessage(const std::string& message, const char* file, int line) {
-    return std::vformat(message, std::make_format_args(file, line));
+    try {
+        return fmt::format("[{}:{}] {}", file, line, message);
+    } catch (const fmt::format_error& e) {
+        return "Invalid log format: " + std::string(e.what());
+    }
 }

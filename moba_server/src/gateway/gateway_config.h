@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <toml++/toml.hpp>
-#include <filesystem>  // 添加文件系统支持
+#include <filesystem>
 
 struct GatewayConfig {
     struct Network {

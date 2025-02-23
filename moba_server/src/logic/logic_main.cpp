@@ -7,22 +7,17 @@
 
 int main(int argc, char* argv[]) {
     try {
-        // 检查命令行参数
-        if (argc < 2) {
-            std::cerr << "Usage: " << argv[0] << " <config_file_path>" << std::endl;
-            return 1;
-        }
-        // 获取配置文件路径
-        std::string config_path = argv[1];
-        std::cout << "Loading config from: " << config_path << std::endl;
-        // 加载配置
-        auto config = ConfigLoader::Load<LogicConfig>(config_path);
+        auto config = ConfigLoader::Load<GatewayConfig>("../conf/logic.toml");
 
-        // 打印配置信息
-        std::cout << "Redis Host: " << config.redis.host << std::endl;
-        std::cout << "Redis Port: " << config.redis.port << std::endl;
-        std::cout << "Redis DB Index: " << config.redis.db_index << std::endl;
-        std::cout << "Redis Pool Size: " << config.redis.pool_size << std::endl;
+        // 初始化日志
+        Logger::Config log_config{
+            .path = config.log.path,
+            .level = config.log.level,
+            .max_size = config.log.max_size,
+            .backup_count = config.log.backup_count,
+            .daemon_mode = config.log.daemon_mode
+        };
+        Logger::Init(log_config);
         
         // 初始化Redis连接池
         RedisPool::Instance().Init(

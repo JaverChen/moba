@@ -9,10 +9,12 @@
 #include <sys/stat.h>
 #include <fmt/format.h>
 
-#define LOG_DEBUG(...) Logger::Log(DEBUG, fmt::format("[{}:{}] {}", __FILE__, __LINE__, fmt::format(__VA_ARGS__)))
-#define LOG_INFO(...)  Logger::Log(INFO,  fmt::format("[{}:{}] {}", __FILE__, __LINE__, fmt::format(__VA_ARGS__)))
-#define LOG_WARN(...)  Logger::Log(WARN,  fmt::format("[{}:{}] {}", __FILE__, __LINE__, fmt::format(__VA_ARGS__)))
-#define LOG_ERROR(...) Logger::Log(ERROR, fmt::format("[{}:{}] {}", __FILE__, __LINE__, fmt::format(__VA_ARGS__)))
+//日志宏
+#define LOG_DEBUG(...) Logger::Log(DEBUG, Logger::FormatMessage(fmt::format(__VA_ARGS__), __FILE__, __LINE__))
+#define LOG_INFO(...)  Logger::Log(INFO,  Logger::FormatMessage(fmt::format(__VA_ARGS__), __FILE__, __LINE__))
+#define LOG_WARN(...)  Logger::Log(WARN,  Logger::FormatMessage(fmt::format(__VA_ARGS__), __FILE__, __LINE__))
+#define LOG_ERROR(...) Logger::Log(ERROR, Logger::FormatMessage(fmt::format(__VA_ARGS__), __FILE__, __LINE__))
+
 
 enum LogLevel {
     DEBUG = 0,
@@ -33,6 +35,7 @@ public:
 
     static void Init(const Config& config);
     static void Log(LogLevel level, const std::string& formatted_message);
+    static std::string FormatMessage(const std::string& message, const char* file, int line);
 private:
     static std::ofstream log_file_;
     static std::mutex log_mutex_;
@@ -44,5 +47,4 @@ private:
     static size_t ConvertSize(const std::string& size_str);
     static const char* LevelToString(LogLevel level);
     static std::string GetTimestamp();
-    static std::string FormatMessage(const std::string& message, const char* file, int line);
 };

@@ -6,7 +6,8 @@ sudo apt-get install -y   \
     libmysqlclient-dev     \
     libhiredis-dev     \
     protobuf-compiler     \
-    libprotobuf-dev
+    libprotobuf-dev   \
+    libfmt-dev
 
 #安装redis
 sudo apt install redis-server
