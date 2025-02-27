@@ -19,15 +19,21 @@ protobuf_generate_cpp(
 )
 
 # 依赖查找
-find_package(Boost 1.71.0 REQUIRED COMPONENTS system)
+find_package(Boost 1.71.0 REQUIRED COMPONENTS system filesystem iostreams)
 find_package(OpenSSL REQUIRED)
 find_package(Threads REQUIRED)
 find_package(fmt REQUIRED)
+find_package(ZLIB REQUIRED)
 
 # MySQL/Hiredis手动配置
 set(MYSQL_INCLUDE_DIR "/usr/include/mysql")
 set(MYSQL_LIBRARY "/usr/lib/x86_64-linux-gnu/libmysqlclient.so")
 set(HIREDIS_LIB "/usr/lib/x86_64-linux-gnu/libhiredis.so")
+
+# 添加文件系统库
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9.0)
+    link_libraries(stdc++fs)
+endif()
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
@@ -52,8 +58,12 @@ target_link_libraries(Gateway
     protobuf::libprotobuf
     Boost::boost
     Boost::system
+    Boost::filesystem
+    Boost::iostreams
     OpenSSL::SSL
+    OpenSSL::Crypto
     fmt::fmt
+    ${ZLIB_LIBRARIES}
     ${MYSQL_LIBRARY}
     ${HIREDIS_LIB}
     ${CMAKE_THREAD_LIBS_INIT}
@@ -65,11 +75,18 @@ add_executable(Logic
     src/logic/battle_simulator.cpp
     src/common/protocol.cpp
     src/common/redis_pool.cpp
+    src/common/logger.cpp
+    src/logic/state_sender.cpp
     ${PROTO_SRCS}
 )
 target_link_libraries(Logic
     protobuf::libprotobuf
     fmt::fmt
+    Boost::boost
+    Boost::system
+    Boost::filesystem
+    Boost::iostreams
+    ${ZLIB_LIBRARIES}
     ${HIREDIS_LIB}
     ${CMAKE_THREAD_LIBS_INIT}
     ${OPENSSL_LIBRARIES}

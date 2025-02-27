@@ -30,7 +30,6 @@ void FrameSync::SyncThread() {
             std::vector<char> data(
                 reply->element[1]->str,
                 reply->element[1]->str + reply->element[1]->len);
-            
             {
                 std::lock_guard<std::mutex> lock(mutex_);
                 frames_.push_back(data);

@@ -1,16 +1,13 @@
-#ifndef BATTLE_SIMULATOR_H
-#define BATTLE_SIMULATOR_H
-
+#pragma once
 #include <vector>
 #include "../common/protocol.h"
 
 class BattleSimulator {
 public:
-    void Simulate(const std::vector<moba::PlayerInput>& inputs);
+    void Simulate(const google::protobuf::RepeatedPtrField<moba::PlayerInput>& inputs);
+    moba::Player* GetOrCreatePlayer(uint32_t id);
     moba::GameState GetState() const;
 
 private:
     moba::GameState state_;
 };
-
-#endif

@@ -57,6 +57,7 @@ void Logger::Log(LogLevel level, const std::string& message) {
 
     std::lock_guard<std::mutex> lock(log_mutex_); 
 
+    std::string entry = GetTimestamp() + " [" + LevelToString(level) + "] " + message;
     // 非守护模式输出到控制台
     if (!current_config_.daemon_mode) {
         std::cout << entry << std::endl;

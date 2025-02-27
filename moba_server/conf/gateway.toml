@@ -12,6 +12,13 @@ mysql_user = "moba_gateway"
 mysql_password = "SecurePass123!"
 mysql_dbname = "moba_main"
 
+[redis]
+host = "127.0.0.1"
+port = 6379
+password = "123456"
+db_index = 1  # 逻辑服专用DB
+pool_size = 20  # 连接池大小
+
 [log]
 path = "../logs/gateway.log"  # 支持绝对路径或相对路径
 level = "debug"                     # 日志级别

@@ -4,6 +4,8 @@ moba_server/
 ├── src/
 │   ├── common/
 │   │   ├── config_loader.h
+│   │   ├── compression.h
+│   │   ├── crc32.h
 │   │   ├── protocol.cpp
 │   │   ├── protocol.h
 │   │   ├── logger.h
@@ -13,6 +15,8 @@ moba_server/
 │   │   ├── redis_pool.h
 │   │   └── redis_pool.cpp
 │   ├── gateway/              #网关服务
+│   │   ├── exception_handler.h
+│   │   ├── exception_handler.cpp
 │   │   ├── connection.h
 │   │   ├── connection.cpp
 │   │   ├── gateway_main.cpp
@@ -22,6 +26,8 @@ moba_server/
 │   │   ├── connection_manager.cpp
 │   │   └── connection_manager.cpp
 │   ├── logic/                # 逻辑服务
+│   │   ├── state_sender.h
+│   │   ├── state_sender.cpp
 │   │   ├── frame_sync.h
 │   │   ├── frame_sync.cpp
 │   │   ├── battle_simulator.h

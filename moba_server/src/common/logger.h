@@ -10,6 +10,7 @@
 #include <fmt/format.h>
 
 //日志宏
+#define LOG_TRACE(...) Logger::Log(TRACE, Logger::FormatMessage(__VA_ARGS__, __FILE__, __LINE__))
 #define LOG_DEBUG(...) Logger::Log(DEBUG, Logger::FormatMessage(fmt::format(__VA_ARGS__), __FILE__, __LINE__))
 #define LOG_INFO(...)  Logger::Log(INFO,  Logger::FormatMessage(fmt::format(__VA_ARGS__), __FILE__, __LINE__))
 #define LOG_WARN(...)  Logger::Log(WARN,  Logger::FormatMessage(fmt::format(__VA_ARGS__), __FILE__, __LINE__))
@@ -17,10 +18,11 @@
 
 
 enum LogLevel {
-    DEBUG = 0,
-    INFO = 1,
-    WARN = 2,
-    ERROR = 3
+    TRACE = 0,  // 详细跟踪
+    DEBUG = 1,  // 调试信息
+    INFO  = 2,  // 常规信息
+    WARN  = 3,  // 警告信息
+    ERROR = 4   // 错误信息
 };
 
 class Logger {

@@ -28,9 +28,18 @@ struct GatewayConfig {
         bool daemon_mode = false;
     };
 
+    struct RedisConfig {
+        std::string host = "127.0.0.1";
+        int port = 6379;
+        std::string password;
+        int db_index = 1;
+        int pool_size = 20;
+    };
+
     Network network;
     Database database;
     Log log;
+    RedisConfig redis;
 
     // 添加静态解析方法
     static GatewayConfig parse(const toml::table& tbl, const std::string& config_path);

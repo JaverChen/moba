@@ -19,11 +19,15 @@ public:
     void ReleaseConnection(redisContext* conn);
     ~RedisPool();
 
+    bool ExecuteCommand(const std::string& command, const std::vector<char>& data);
+
 private:
     RedisPool() = default; // 私有构造函数
     std::queue<redisContext*> pool_;
     std::mutex mutex_;
     int max_connections_ = 0;
+    std::string host_; 
+    int port_ = 6379; 
 };
 
 #endif

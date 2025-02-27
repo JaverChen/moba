@@ -21,8 +21,14 @@ struct LogicConfig {
         bool daemon_mode = false;
     };
 
+    struct GatewayConfig {
+        std::string gateway_ip = "127.0.0.1";
+        int gateway_port = 8888;
+    };
+
     RedisConfig redis;
     Log log;
+    GatewayConfig gateway;
 
     // 添加静态解析方法
     static LogicConfig parse(const toml::table& tbl, const std::string& config_path);
@@ -55,6 +61,12 @@ inline LogicConfig LogicConfig::parse(const toml::table& tbl, const std::string&
            log_path = config_dir / log_path;
            config.log.path = log_path.lexically_normal().string();
        }
+    }
+
+    // 网关相关字段解析
+    if (auto gateway_table = tbl["gateway"].as_table()) {
+        config.gateway.gateway_ip = gateway_table->get("gateway_ip")->value_or("127.0.0.1");
+        config.gateway.gateway_port = gateway_table->get("gateway_port")->value_or(8888);
     }
 
     return config;

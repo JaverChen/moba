@@ -7,7 +7,8 @@ sudo apt-get install -y   \
     libhiredis-dev     \
     protobuf-compiler     \
     libprotobuf-dev   \
-    libfmt-dev
+    libfmt-dev  \
+    zlib1g-dev
 
 #安装redis
 sudo apt install redis-server

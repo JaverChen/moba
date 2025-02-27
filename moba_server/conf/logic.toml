@@ -26,7 +26,6 @@ max_size = "500MB"                  # 单文件最大尺寸
 backup_count = 5                    # 保留历史文件数量
 daemon_mode = true                  # 是否后台运行
 
-# 调试配置
-[debug]
-allow_cheat_codes = false  # 是否允许作弊码
-log_missed_frames = true   # 记录丢帧情况
+[gateway]
+gateway_ip = 127.0.0.1
+gateway_port = 8888
